@@ -1,41 +1,45 @@
-// El Grinch está abriendo las cartas que iban a Santa Claus y las está dejando hechas un lío. 😱
+// Tienes una caja de regalos de Navidad que Santa Claus quiere entregar a los niños. Cada regalo está representado por una cadena. Santa Claus tiene un trineo que puede llevar un peso limitado, y cada regalo dentro de la caja tiene un peso que es igual al número de letras en el nombre del regalo.
 
-// Las cartas son una cadena de texto que incluyen regalos y paréntesis ().
+// Santa Claus también tiene una lista de renos que pueden ayudarlo a entregar los regalos. Cada reno tiene un límite de peso máximo que puede llevar. El límite de peso máximo de cada reno es igual a dos veces el número de letras en su nombre.
 
-// Para saber si una carta es válida ✅, debes comprobar que los paréntesis cierran correctamente y que, además, no vayan vacíos.
+// Tu tarea es implementar una función distributeGifts(packOfGifts, reindeers) que recibe una caja de regalos y una lista de renos y devuelve el número máximo de cajas de estos regalos que Santa Claus puede entregar a los niños. Las cajas de regalos no se pueden dividir.
 
-// ¡Pero ojo! Porque el Grinch ha dejado llaves { y corchetes [ dentro de los paréntesis que hacen que no sean válidas. Por suerte sólo los ha dejado en medio de los paréntesis...
+// const packOfGifts = ["book", "doll", "ball"]
+// const reindeers = ["dasher", "dancer"]
 
-// Ejemplos:
+// el pack de regalos pesa 4 + 4 + 4 = 12
+// los renos pueden llevar (2 * 6) + (2 * 6) = 24
+// por lo tanto, Santa Claus puede entregar 2 cajas de regalos
 
-// "bici coche (balón) bici coche peluche" // -> ✅
-// "(muñeca) consola bici" // ✅
+// distributeGifts(packOfGifts, reindeers) // 2
+// Cosas a tener en cuenta:
 
-// "bici coche (balón bici coche" // -> ❌
-// "peluche (bici [coche) bici coche balón" // -> ❌
-// "(peluche {) bici" // -> ❌
-// "() bici" // ❌
+// Las cajas de regalos no se pueden dividir.
+// Los nombres de los regalos y los renos siempre serán mayores que 0.
 
-// Crea una función que pasándole el texto de la carta, devuelva true si es válida y false si no lo es. ¡Y acaba con la travesura del Grinch!
+const packOfGifts = ["book", "doll"];
+const reindeers = ["dasher", "dancer", "stephen"];
 
-function isValid(letter) {
-  const parentesis = letter.indexOf('(')
-  const parentesis2 = letter.indexOf(')')
+// el pack de regalos pesa 4 + 4 + 4 = 12
+// los renos pueden llevar (2 * 6) + (2 * 6) = 24
+// por lo tanto, Santa Claus puede entregar 2 cajas de regalos
 
-  if(parentesis === -1 || parentesis2 === -1 || parentesis > parentesis2){
-    return false
-  }else{
-    const carta = letter.substring(parentesis,parentesis2+1)
-    console.log(carta)
-    if (carta.includes('()') || carta.includes('{') || carta.includes('[') || carta.includes(']') || carta.includes('}') )
-      return false
-    }
-  return true
+function distributeGifts(packOfGifts, reindeers) {
+  let packageWeight = 0;
+  let reindeerMaxWeight = 0;
+
+  packOfGifts.map((gif) => {
+    let packageSize = gif.length;
+    packageWeight += packageSize;
+  });
+
+  reindeers.map((reindeer) => {
+    let reindeerMaxInd = reindeer.length * 2;
+    reindeerMaxWeight += reindeerMaxInd;
+  });
+
+  const resultado = Math.floor(reindeerMaxWeight / packageWeight);
+  console.log(resultado);
 }
 
-isValid('bici coche (balón) bici coche peluche')
-isValid("(muñeca) consola bici")
-isValid("bici coche (balón bici coche")
-isValid("peluche (bici [coche) bici coche balón")
-isValid("(peluche {) bici")
-isValid("() bici")
+distributeGifts(packOfGifts, reindeers); // 2

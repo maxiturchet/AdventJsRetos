@@ -1,61 +1,70 @@
-// ¡Es hora de poner el árbol de navidad en casa! 🎄
+// Santa Claus necesita hacer una revisión de sus cajas de regalos para asegurarse de que puede empaquetarlas todas en su trineo. Cuenta con una serie de cajas de diferentes tamaños, que se caracterizan por su longitud, anchura y altura.
 
-// Para ello vamos a crear una función que recibe la altura del árbol, que será un entero positivo del 1 a, como máximo, 100.
+// Tu tarea es escribir una función que, dada una lista de cajas con sus tamaños, determine si es posible empaquetar todas las cajas en una sola de manera que cada caja contenga a otra (que a su vez contenga a otra, y así sucesivamente).
 
-// Si le pasamos el argumento 5, se pintaría esto:
+// Cada caja representa sus medidas con un objeto. Por ejemplo: {l: 2, w: 3, h: 2}. Esto significa que la caja tiene una longitud de 2, una anchura de 3 y una altura de 2.
 
-// ____*____
-// ___***___
-// __*****__
-// _*******_
-// *********
-// ____#____
-// ____#____
-// Creamos un triángulo de asteriscos * con la altura proporcionada y, a los lados, usamos el guión bajo _ para los espacios. Es muy importante que nuestro árbol siempre tenga la misma longitud por cada lado.
-// Todos los árboles, por pequeños o grandes que sean, tienen un tronco de dos líneas de #.
+// Una caja entra en otra caja si todos los lados de la primera son menores a los lados de la segunda. Los elfos nos han dicho que las cajas no se pueden rotar, así que no se puede poner una caja de 2x3x2 en una caja de 3x2x2. Veamos unos ejemplos:
 
-// Otro ejemplo con un árbol de altura 3:
+// fitsInOneBox([
+//   { l: 1, w: 1, h: 1 },
+//   { l: 2, w: 2, h: 2 }
+// ]) // true
+// En el ejemplo anterior, la caja más pequeña entra en la caja más grande. Por lo tanto, es posible empaquetar todas las cajas en una sola. Ahora veamos un caso que no:
 
-// __*__
-// _***_
-// *****
-// __#__
-// __#__
-// Ten en cuenta que el árbol es un string y necesitas los saltos de línea \n para cada línea para que se forme bien el árbol.
+// const boxes = [
+//   { l: 1, w: 1, h: 1 },
+//   { l: 2, w: 2, h: 2 },
+//   { l: 3, w: 1, h: 3 }
+// ]
 
-function createXmasTree(height) {
-  let arbol = "";
-  let tronco = "";
+// fitsInOneBox(boxes) // false
+// En el ejemplo anterior, la caja más pequeña entra en la caja del medio, pero la caja del medio no entra en la caja más grande. Por lo tanto, no es posible empaquetar todas las cajas en una sola.
 
-  for (let i = 0; i < height; i++) {
-    for (let raya = 1; raya < height - i; raya++) {
-      if (i === 0) {
-        tronco += "_";
-      }
-      arbol += "_";
-    }
-    for (let asterisco = 0; asterisco <= i; asterisco++) {
-      if (i === 0) {
-        tronco += "#";
-      }
-      if (asterisco === 0) {
-        arbol += "*";
-      } else {
-        arbol += "**";
-      }
-    }
-    for (raya = 1; raya < height - i; raya++) {
-      if (i === 0) {
-        tronco += "_";
-      }
-      arbol += "_";
-    }
-    arbol += "\n";
-  }
-  arbol += tronco + "\n";
-  arbol += tronco;
+// Ten en cuenta que las cajas pueden no venir en orden:
 
-  return arbol;
+// const boxes = [
+//   { l: 1, w: 1, h: 1 },
+//   { l: 3, w: 3, h: 3 },
+//   { l: 2, w: 2, h: 2 }
+// ]
+
+// fitsInOneBox(boxes) // true
+// En el ejemplo anterior, la primer caja cabe en la tercera, y la tercera en la segunda. Por lo tanto, es posible empaquetar todas las cajas en una sola.
+
+// Cosas a tener en cuenta:
+
+// Las cajas no se pueden rotar ya que los elfos nos han dicho que la máquina no está preparada.
+// Las cajas pueden venir desordenadas de tamaño.
+// Las cajas no son siempre cuadradas, pueden ser rectangulares.
+
+const boxesFalse = [
+  { l: 1, w: 1, h: 1 },
+  { l: 2, w: 2, h: 2 },
+  { l: 3, w: 1, h: 3 },
+];
+
+const boxesTrue = [
+  { l: 1, w: 1, h: 1 },
+  { l: 3, w: 3, h: 3 },
+  { l: 2, w: 2, h: 2 },
+];
+
+const boxTest = [
+  { l: 1, w: 1, h: 1 },
+  { l: 2, w: 2, h: 2 },
+];
+
+function fitsInOneBox(boxes) {
+  return boxes
+    .sort((a, b) => a.l - b.l)
+    .every((box, index) => {
+      if (index == boxes.length - 1) return true;
+      const cajaSig = boxes[index + 1];
+      const nextBox =
+        box.l < cajaSig.l && box.w < cajaSig.w && box.h < cajaSig.h;
+      return nextBox;
+    });
 }
 
-console.log(createXmasTree(9));
+fitsInOneBox(boxTest);
