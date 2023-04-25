@@ -33,26 +33,22 @@
 // Devuelve un array vacío si no hay archivos que hacer backup.
 // Recuerda que deben estar ordenados los id de forma ascendente.
 
-const lastBackup = 1546300800
+const lastBackup = 1546300800;
 const changes = [
-  [ 3, 1546301100 ],
-  [ 2, 1546300800 ],
-  [ 1, 1546300800 ],
-  [ 1, 1546300900 ],
-  [ 1, 1546301000 ]
-]
+  [3, 1546301100],
+  [2, 1546300800],
+  [1, 1546300800],
+  [1, 1546300900],
+  [1, 1546301000],
+];
 
 function getFilesToBackup(lastBackup, changes) {
-  const myBackup = []
-  changes.filter(backup  => {
-    backup[1] > lastBackup 
-    ? myBackup.push(backup[0]) 
-    : backup
-  })
-  myBackup.sort((a, b) => a - b)
+  let filtered = changes.filter((times) => times[1] > lastBackup);
+  let ids = filtered.map((id) => id[0]);
+  let myBackupSet = [...new Set(ids)]
+  myBackupSet.sort((a, b) => a - b);
 
-  return [...new Set(myBackup)]
+  return myBackupSet;
 }
 
-
-console.log(getFilesToBackup(lastBackup, changes))
+console.log(getFilesToBackup(lastBackup, changes));
